@@ -39,7 +39,27 @@
 
   <div class="row">
     <div class="col-md-12">
+      <h2>Meltdown Mitigations/KPTI</h2>
+      <p>Meltdown's mitigations exist at the kernel level. Over January 2018, major operating systems were patched. Linux mitigated the vulnerability using KPTI (kernel page-table isolation), which
+        originated from the KAISER (Kernel Address Isolation to have Side-channels Efficiently Removed) patch set developed to harden the kernel against KASLR<sup><a href="#1">[1]</a></sup>.</p>
 
+      <figure class="figure text-center d-block">
+        <img style="height: 300px;" src="images/kpti.png"/>
+        <figcaption class="figure-caption">Fig. 1: Effect of KPTI on the kernel and user page tables</figcaption>
+      </figure>
+
+      <p>KPTI mitigates Meltdown by separating user-space and kernel-space page tables<sup><a href="#2">[2]</a></sup>. The kernel-space address contains the same page tables as before (including
+        user-space pages and the entire physical memory) for use in kernel mode. The page table for user mode contains the user-space as expected. However, it also contains a minimal subset of the
+        kernel space for x86 processors and the Linux kernel to function as they were designed with the assumption that kernel space would be present in both modes.</p>
+
+      <p>The user-space and kernel-space page tables are placed at a pre-defined offset to each other in physical memory such that upon a context mode switch, only a short computation (basic bit
+        mask) needs to be applied to the address in the register holding the current page table in order to point to the correct page table<sup><a href="#3">[3]</a></sup>. Although this would lead to
+        performance issues as the default action of the TLB is to perform a flush every time the page table register changes, Gruss et al. state that current Intel x86 processors have optimisations
+        which prevent TLB flushes from happening by tagging TLB-cached page tables with a context identifier (via the Processor-Context ID [PCID] feature<sup><a href="#4">[4]</a></sup>).</p>
+
+      <p>However, the success of this mitigation is not without performance impacts. Even with PCID enabled, real-world workloads have had performance decreases. A senior developer for PostgreSQL
+        reported a worst case of 23% slowdown with a simple SELECT query<sup><a href="#5">[5]</a></sup>. Simakov et al. reported that specific high performance computing functions had performance
+        decreases of up to 74%<sup><a href="#6">[6]</a></sup>.</p>
     </div>
   </div>
 
@@ -47,7 +67,12 @@
   <row>
     <div class="col-md-12">
       <p>
-
+        <span id="1"><sup>[1]</sup></span> J. Corbet, <em>The current state of kernel page-table isolation</em>, [website], 2017, <a href="https://lwn.net/Articles/741878/">https://lwn.net/Articles/741878/</a>, (accessed 25 February 2018).<br />
+        <span id="2"><sup>[2]</sup></span> J. Corbet, <em>KAISER: hiding the kernel from user space</em>, [website], 2017, <a href="https://lwn.net/Articles/738975/">https://lwn.net/Articles/738975/</a>, (accessed 25 February 2018).<br />
+        <span id="3"><sup>[3]</sup></span> D. Gruss et al., 'KASLR is Dead: Long Live KASLR', <em>International Symposium on Engineering Secure Software and Systems</em>, 2017, pp. 161-176.<br />
+        <span id="4"><sup>[4]</sup></span> G.  Tene, <em>PCID is now a critical performance/security feature on x86</em>, [website], 2018, <a href="https://groups.google.com/forum/#!topic/mechanical-sympathy/L9mHTbeQLNU">https://groups.google.com/forum/#!topic/mechanical-sympathy/L9mHTbeQLNU</a>, (accessed 26 February 2018).
+        <span id="5"><sup>[5]</sup></span> A. Freund, <em>heads up: Fix for intel hardware bug will lead to performance regressions</em>, [website], 2018, <a href="https://www.postgresql.org/message-id/20180102222354.qikjmf7dvnjgbkxe@alap3.anarazel.de">https://www.postgresql.org/message-id/20180102222354.qikjmf7dvnjgbkxe@alap3.anarazel.de</a>, (accessed 26 February 2018).<br />
+        <span id="6"><sup>[6]</sup></span> N.A. Simakov, et al., 'Effect of Meltdown and Spectre Patches on the Performance of HPC Applications', <em>arXiv preprint arXiv:1801.04329</em>, 2018.
       </p>
     </div>
   </row>
