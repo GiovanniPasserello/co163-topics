@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Meltdown and Spectre</title>
+
+  <link rel="stylesheet" href="css/bootstrap.css" media="screen">
+  <link rel="stylesheet" href="css/custom.min.css">
+</head>
+<body>
+<div class="navbar navbar-expand-lg fixed-top navbar-light bg-light">
+  <div class="container">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+    </button>
+    <div class="collapse navbar-collapse" id="navbarResponsive">
+      <ul class="navbar-nav">
+        <li class="nav-item active">
+          <a class="nav-link" href="index.html">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="background-memory-management.html">Background</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="meltdown-introduction.html">Meltdown</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="spectre-introduction.html">Spectre</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+
+<div class="container">
+
+  <div class="row">
+    <div class="col-md-12">
+      <h1>Memory Management and ASLR</h1>
+      <p>
+        Both the Meltdown and Spectre attacks allow attackers to leak information from memory. Meltdown in particular allows an attacker to read a machine's entire kernel memory, bypassing techniques
+        aimed at preventing processes from accessing memory locations which should not be able to be accessed<sup><a href="#1">[1]</a></sup>. This section explains memory management in more detail.
+      </p>
+      <h2>Virtual Memory</h2>
+      <p>
+        In modern computers, a common memory management technique is the concept of virtual memory, where programs are assigned their own virtual address space and interact with the physical memory
+        via virtual addresses<sup><a href="#2">[2]</a></sup>. This abstraction layer provides several benefits where the responsibility of sharing a limited amount of physical memory with other
+        processes is delegated to the
+        operating system.
+      </p>
+      <figure class="figure text-center d-block ">
+        <img style="height: 300px;" src="images/virtualmemory.png"/>
+        <figcaption class="figure-caption">Fig. 1: Model of page-frame mapping</figcaption>
+      </figure>
+
+      <p>
+        For virtual addressing to work, physical memory is divided into consecutive blocks called frames, and virtual memory is formed of pages, which are fixed-length contiguous blocks of virtual
+        memory which map to frames. Each process is assigned a page table, a data structure which contains the physical memory mappings. Additionally, page tables contain security-related properties
+        such as whether a virtual memory region is read-only, accessible from user/kernel mode (discussed later) or executable<sup><a href="#3">[3]</a></sup>.
+      </p>
+      <p>
+        The main security benefit of virtual addressing is that processes cannot access the virtual address space of other processes. If processes could directly interact with physical memory in user
+        mode with insufficient protection from the operating system, they would be able to access memory of other processes, allowing malicious processes to view sensitive data. This process isolation
+        is enforced with a special CPU register which stores the address of the current process' page table<sup><a href="#4">[4]</a></sup>.
+      </p>
+    </div>
+  </div>
+
+  <hr>
+  <row>
+    <div class="col-md-12">
+      <p>
+        <span id="1"><sup>[1]</sup></span> M. Lipp et al., 'Meltdown', <em>arXiv preprint arXiv:1801.01207</em>, 2018.<br />
+        <span id="2"><sup>[2]</sup></span> D. Kleidermacher and M. Kleidermacher, <em>Embedded Systems Security: Practical Methods for Safe and Secure Software and Systems Development</em>, Amsterdam,. Elsevier, 2012, p. 35.<br />
+        <span id="3"><sup>[3]</sup></span> N. Bazan and A. Myers, <em>Virtual address spaces</em>, [website], 2017, <a href="https://docs.microsoft.com/en-us/windows-hardware/drivers/gettingstarted/virtual-address-spaces">https://docs.microsoft.com/en-us/windows-hardware/drivers/gettingstarted/virtual-address-spaces</a>, (accessed 17 February 2018).<br />
+        <span id="4"><sup>[4]</sup></span> D. Gruss et al., 'KASLR is Dead: Long Live KASLR', <em>International Symposium on Engineering Secure Software and Systems</em>, 2017, pp. 161-176.<br />
+        <span id="5"><sup>[5]</sup></span> W. Toomey, <em>User- and Kernel Mode, System Calls, I/O, Exceptions</em>, [website], 2012, <a href="http://minnie.tuhs.org/CompArch/Lectures/week05.html">http://minnie.tuhs.org/CompArch/Lectures/week05.html</a>, (accessed 18 February 2018).<br />
+        <span id="6"><sup>[6]</sup></span> J. Corbet, <em>KAISER: hiding the kernel from user space</em>, [website], 2017, <a href="https://lwn.net/Articles/738975/">https://lwn.net/Articles/738975/</a>, (accessed 25 February 2018).<br />
+      </p>
+    </div>
+  </row>
+  <hr>
+
+  <footer id="footer">
+    <div class="row">
+      <div class="col-lg-12">
+        <p>Created by <a href="#">Dingyu Chen</a>, <a href="#">Anindita Ghosh</a>, <a href="#">Giovanni Passerello</a> and <a href="kelvin/index.html">Kelvin Zhang</a>.</p>
+      </div>
+    </div>
+  </footer>
+
+
+</div>
+
+
+<script src="js/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+</body>
+</html>
