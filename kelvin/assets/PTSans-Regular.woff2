@@ -1,0 +1,11 @@
+--2018-03-04 15:01:55--  https://fonts.gstatic.com/s/ptsans/v9/jizaRExUiTo99u79D0KExQ.woff2
+Resolving fonts.gstatic.com (fonts.gstatic.com)... 216.58.212.67, 2a00:1450:4009:806::2003
+Connecting to fonts.gstatic.com (fonts.gstatic.com)|216.58.212.67|:443... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 45052 (44K) [font/woff2]
+Saving to: ‘jizaRExUiTo99u79D0KExQ.woff2’
+
+     0K .......... .......... .......... .......... ...       100% 3.39M=0.01s
+
+2018-03-04 15:01:55 (3.39 MB/s) - ‘jizaRExUiTo99u79D0KExQ.woff2’ saved [45052/45052]
+
