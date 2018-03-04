@@ -51,11 +51,10 @@
         processes is delegated to the
         operating system.
       </p>
-      <figure class="figure text-center d-block ">
+      <figure class="figure text-center d-block">
         <img style="height: 300px;" src="images/virtualmemory.png"/>
         <figcaption class="figure-caption">Fig. 1: Model of page-frame mapping</figcaption>
       </figure>
-
       <p>
         For virtual addressing to work, physical memory is divided into consecutive blocks called frames, and virtual memory is formed of pages, which are fixed-length contiguous blocks of virtual
         memory which map to frames. Each process is assigned a page table, a data structure which contains the physical memory mappings. Additionally, page tables contain security-related properties
@@ -66,6 +65,19 @@
         mode with insufficient protection from the operating system, they would be able to access memory of other processes, allowing malicious processes to view sensitive data. This process isolation
         is enforced with a special CPU register which stores the address of the current process' page table<sup><a href="#4">[4]</a></sup>.
       </p>
+      <p>Additionally, isolating processes in virtual memory complements the concept of user mode and kernel mode, where each user mode process is given its own virtual address space, whereas the
+        kernel shares a single virtual address space. Additionally, processes in user mode cannot access kernel memory directly; instead they must call public APIs exposed by the kernel (system calls)
+        <sup><a href="#5">[5]</a></sup>.</p>
+      <p>To improve the performance of virtual addressing, the memory management unit contains the translation lookaside buffer (TLB)<sup><a href="#4">[4]</a></sup> which operates as a cache for recent translations from
+        virtual to physical memory. The issue with keeping this cache is that a process can switch between user mode and kernel mode repeatedly as system calls are made, causing the TLB to be flushed
+        and reloaded by reading the page table of the mode being entered. As a result, the kernel is loaded at a predefined position of every user mode process, relying on the properties of the page
+        tables and a processor's supervisor bit<sup><a href="#6">[6]</a></sup> to determine whether the kernel can be accessed.</p>
+      <figure class="figure text-center d-block">
+        <img style="height: 150px;" src="images/mapping.png"/>
+        <figcaption class="figure-caption">Fig. 2: Visualisation of physical memory being mapped into <br />kernel-space of a process (blue represents a chunk of memory)</figcaption>
+      </figure>
+      <p>Most importantly in the context of Spectre and Meltdown, as the kernel may need to access user memory, operating systems such as Linux and OS X map the entire physical memory into a
+        predefined virtual address in kernel address space so that the kernel can access the memory it needs<sup><a href="#4">[4]</a></sup>.</p>
     </div>
   </div>
 
@@ -78,7 +90,7 @@
         <span id="3"><sup>[3]</sup></span> N. Bazan and A. Myers, <em>Virtual address spaces</em>, [website], 2017, <a href="https://docs.microsoft.com/en-us/windows-hardware/drivers/gettingstarted/virtual-address-spaces">https://docs.microsoft.com/en-us/windows-hardware/drivers/gettingstarted/virtual-address-spaces</a>, (accessed 17 February 2018).<br />
         <span id="4"><sup>[4]</sup></span> D. Gruss et al., 'KASLR is Dead: Long Live KASLR', <em>International Symposium on Engineering Secure Software and Systems</em>, 2017, pp. 161-176.<br />
         <span id="5"><sup>[5]</sup></span> W. Toomey, <em>User- and Kernel Mode, System Calls, I/O, Exceptions</em>, [website], 2012, <a href="http://minnie.tuhs.org/CompArch/Lectures/week05.html">http://minnie.tuhs.org/CompArch/Lectures/week05.html</a>, (accessed 18 February 2018).<br />
-        <span id="6"><sup>[6]</sup></span> J. Corbet, <em>KAISER: hiding the kernel from user space</em>, [website], 2017, <a href="https://lwn.net/Articles/738975/">https://lwn.net/Articles/738975/</a>, (accessed 25 February 2018).<br />
+        <span id="6"><sup>[6]</sup></span> J. Corbet, <em>KAISER: hiding the kernel from user space</em>, [website], 2017, <a href="https://lwn.net/Articles/738975/">https://lwn.net/Articles/738975/</a>, (accessed 25 February 2018).
       </p>
     </div>
   </row>

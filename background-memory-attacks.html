@@ -39,7 +39,33 @@
 
   <div class="row">
     <div class="col-md-12">
+      <h2>Memory-corruption Attacks and ASLR</h2>
+      <p>A key feature of the Meltdown paper is that it demonstrates how a side channel attack can prevent KASLR (Kernel Address Space Layout Randomisation)<sup><a href="#1">[1]</a></sup>. This page introduces the concept of
+        memory-corruption attacks and KASLR.</p>
 
+      <p>All software, including the kernel, are susceptible to bugs, including those which lead to security vulnerabilities. The Linux kernel itself had 453 security vulnerabilities published on the
+        CVE database in 2017<sup><a href="#2">[2]</a></sup>. In the operation of a computer, instructions are read from memory to be executed. Therefore, kernel memory attacks can be severe as attackers can cause malicious code
+        to be executed in kernel mode by overwriting kernel memory, allowing any CPU instruction to be executed and all memory addresses to be referenced.</p>
+
+      <p>One common example of a memory-corruption attack is using a buffer overflow vulnerability<sup><a href="#3">[3]</a></sup>, allowing an attacker writes data past a buffer's boundary in a vulnerable program to overwrite
+        adjacent memory locations. The adjacent memory location could be a return address for a function which could be overwritten by an attacker to point to the attacker's code written elsewhere
+        into memory. Fortunately, executable space protection allows user-writable pages to be marked as non-executable, causing a targeted process to crash if execution of user-writable memory is
+        attempted.</p>
+
+      <p>Executable space protection is insufficient as there are more complex methods to bypass this security defence such as return-oriented programming. Return-oriented programming (ROP) executes
+        a sequence of instructions/functions already made available by the running program or shared library code in order to execute malicious code<sup><a href="#4">[4]</a></sup>. As executable code stored in memory by
+        definition would not be marked as non-executable, ROP would not be prevented by executable space protection. If a ROP attack occurs in the kernel, the attacker could gain access to the entire
+        system.</p>
+
+      <figure class="figure text-center d-block">
+        <img style="height: 250px;" src="images/aslr.png"/>
+        <figcaption class="figure-caption">Fig. 1: Effect of ASLR on memory-oriented attacks</figcaption>
+      </figure>
+
+      <p>Techniques such as return-oriented programming can be mitigated using ASLR and KASLR. For ROP attacks to work, the attacker needs to know the addresses of functions to be called as passing
+        invalid addresses could lead to the running process crashing. ASLR randomly distributes core parts of processes (base address, libraries, stack pointers, etc.) in virtual memory so that
+        attackers are forced to predict the addresses<sup><a href="#5">[5]</a></sup>. KASLR adds to this by randomising the kernel's location in memory when the system boots, making addresses unpredictable for attackers and
+        therefore preventing ROP attacks.</p>
     </div>
   </div>
 
@@ -47,7 +73,11 @@
   <row>
     <div class="col-md-12">
       <p>
-
+        <span id="1"><sup>[1]</sup></span> M. Lipp et al., 'Meltdown', <em>arXiv preprint arXiv:1801.01207</em>, 2018.<br />
+        <span id="2"><sup>[2]</sup></span> MITRE Corporation, <em>Linux Kernel: Security Vulnerabilities Published In 2017</em>, 2017, <a href="https://www.cvedetails.com/vulnerability-list/vendor_id-33/product_id-47/year-2017/Linux-Linux-Kernel.html">https://www.cvedetails.com/vulnerability-list/vendor_id-33/product_id-47/year-2017/Linux-Linux-Kernel.html</a>, (accessed 25 February 2018).<br />
+        <span id="3"><sup>[3]</sup></span> E. Wimberly, N. Harrison, 'Modern Overflow Targets', 2013, <a href="https://dl.packetstormsecurity.net/papers/general/ModernOverflowTargets.pdf">https://dl.packetstormsecurity.net/papers/general/ModernOverflowTargets.pdf</a>, (accessed 25 February 2018).<br />
+        <span id="4"><sup>[4]</sup></span> R Roemer et al., 'Return-oriented programming: Systems, languages, and applications', <em>ACM Transactions on Information and System Security (TISSEC)</em>, vol. 15, no. 1, 2012, p. 3.<br />
+        <span id="5"><sup>[5]</sup></span> D. Gruss et al., 'KASLR is Dead: Long Live KASLR', <em>International Symposium on Engineering Secure Software and Systems</em>, 2017, pp. 161-176.<br />
       </p>
     </div>
   </row>
