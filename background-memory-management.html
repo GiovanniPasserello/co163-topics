@@ -36,6 +36,14 @@
 
 
 <div class="container">
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="d-flex justify-content-between">
+        <p><small></small></p>
+        <p><small><a href="background-memory-attacks.html">Memory-corruption Attacks and ASLR &raquo;</a></small></p>
+      </div>
+    </div>
+  </div>
 
   <div class="row">
     <div class="col-md-12">
@@ -68,16 +76,26 @@
       <p>Additionally, isolating processes in virtual memory complements the concept of user mode and kernel mode, where each user mode process is given its own virtual address space, whereas the
         kernel shares a single virtual address space. Additionally, processes in user mode cannot access kernel memory directly; instead they must call public APIs exposed by the kernel (system calls)
         <sup><a href="#5">[5]</a></sup>.</p>
-      <p>To improve the performance of virtual addressing, the memory management unit contains the translation lookaside buffer (TLB)<sup><a href="#4">[4]</a></sup> which operates as a cache for recent translations from
+      <p>To improve the performance of virtual addressing, the memory management unit contains the translation lookaside buffer (TLB)<sup><a href="#4">[4]</a></sup> which operates as a cache for
+        recent translations from
         virtual to physical memory. The issue with keeping this cache is that a process can switch between user mode and kernel mode repeatedly as system calls are made, causing the TLB to be flushed
         and reloaded by reading the page table of the mode being entered. As a result, the kernel is loaded at a predefined position of every user mode process, relying on the properties of the page
         tables and a processor's supervisor bit<sup><a href="#6">[6]</a></sup> to determine whether the kernel can be accessed.</p>
       <figure class="figure text-center d-block">
         <img style="height: 150px;" src="images/mapping.png"/>
-        <figcaption class="figure-caption">Fig. 2: Visualisation of physical memory being mapped into <br />kernel-space of a process (blue represents a chunk of memory)</figcaption>
+        <figcaption class="figure-caption">Fig. 2: Visualisation of physical memory being mapped into <br/>kernel-space of a process (blue represents a chunk of memory)</figcaption>
       </figure>
       <p>Most importantly in the context of Spectre and Meltdown, as the kernel may need to access user memory, operating systems such as Linux and OS X map the entire physical memory into a
         predefined virtual address in kernel address space so that the kernel can access the memory it needs<sup><a href="#4">[4]</a></sup>.</p>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="d-flex justify-content-between">
+        <p><small></small></p>
+        <p><b><a href="background-memory-attacks.html">Memory-corruption Attacks and ASLR &raquo;</a></b></p>
+      </div>
     </div>
   </div>
 
@@ -85,12 +103,17 @@
   <row>
     <div class="col-md-12">
       <p>
-        <span id="1"><sup>[1]</sup></span> M. Lipp et al., 'Meltdown', <em>arXiv preprint arXiv:1801.01207</em>, 2018.<br />
-        <span id="2"><sup>[2]</sup></span> D. Kleidermacher and M. Kleidermacher, <em>Embedded Systems Security: Practical Methods for Safe and Secure Software and Systems Development</em>, Amsterdam,. Elsevier, 2012, p. 35.<br />
-        <span id="3"><sup>[3]</sup></span> N. Bazan and A. Myers, <em>Virtual address spaces</em>, [website], 2017, <a href="https://docs.microsoft.com/en-us/windows-hardware/drivers/gettingstarted/virtual-address-spaces">https://docs.microsoft.com/en-us/windows-hardware/drivers/gettingstarted/virtual-address-spaces</a>, (accessed 17 February 2018).<br />
-        <span id="4"><sup>[4]</sup></span> D. Gruss et al., 'KASLR is Dead: Long Live KASLR', <em>International Symposium on Engineering Secure Software and Systems</em>, 2017, pp. 161-176.<br />
-        <span id="5"><sup>[5]</sup></span> W. Toomey, <em>User- and Kernel Mode, System Calls, I/O, Exceptions</em>, [website], 2012, <a href="http://minnie.tuhs.org/CompArch/Lectures/week05.html">http://minnie.tuhs.org/CompArch/Lectures/week05.html</a>, (accessed 18 February 2018).<br />
-        <span id="6"><sup>[6]</sup></span> J. Corbet, <em>KAISER: hiding the kernel from user space</em>, [website], 2017, <a href="https://lwn.net/Articles/738975/">https://lwn.net/Articles/738975/</a>, (accessed 25 February 2018).
+        <span id="1"><sup>[1]</sup></span> M. Lipp et al., 'Meltdown', <em>arXiv preprint arXiv:1801.01207</em>, 2018.<br/>
+        <span id="2"><sup>[2]</sup></span> D. Kleidermacher and M. Kleidermacher, <em>Embedded Systems Security: Practical Methods for Safe and Secure Software and Systems Development</em>,
+        Amsterdam,. Elsevier, 2012, p. 35.<br/>
+        <span id="3"><sup>[3]</sup></span> N. Bazan and A. Myers, <em>Virtual address spaces</em>, [website], 2017, <a
+          href="https://docs.microsoft.com/en-us/windows-hardware/drivers/gettingstarted/virtual-address-spaces">https://docs.microsoft.com/en-us/windows-hardware/drivers/gettingstarted/virtual-address-spaces</a>,
+        (accessed 17 February 2018).<br/>
+        <span id="4"><sup>[4]</sup></span> D. Gruss et al., 'KASLR is Dead: Long Live KASLR', <em>International Symposium on Engineering Secure Software and Systems</em>, 2017, pp. 161-176.<br/>
+        <span id="5"><sup>[5]</sup></span> W. Toomey, <em>User- and Kernel Mode, System Calls, I/O, Exceptions</em>, [website], 2012, <a href="http://minnie.tuhs.org/CompArch/Lectures/week05.html">http://minnie.tuhs.org/CompArch/Lectures/week05.html</a>,
+        (accessed 18 February 2018).<br/>
+        <span id="6"><sup>[6]</sup></span> J. Corbet, <em>KAISER: hiding the kernel from user space</em>, [website], 2017, <a
+          href="https://lwn.net/Articles/738975/">https://lwn.net/Articles/738975/</a>, (accessed 25 February 2018).
       </p>
     </div>
   </row>
