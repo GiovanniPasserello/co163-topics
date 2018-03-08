@@ -87,10 +87,15 @@
         virtual to physical memory. The issue with keeping this cache is that a process can switch between user mode and kernel mode repeatedly as system calls are made, causing the TLB to be flushed
         and reloaded by reading the page table of the mode being entered. As a result, the kernel is loaded at a predefined position of every user mode process, relying on the properties of the page
         tables and a processor's supervisor bit<sup><a href="#6">[6]</a></sup> to determine whether the kernel can be accessed.</p>
+
       <figure class="figure text-center d-block">
-        <img style="height: 150px;" src="images/mapping.png"/>
+        <video style="width: 50%;" autoplay loop>
+          <source  src="images/mappinganimated.mp4" type="video/mp4" />
+          <img src="images/mappinganimated.gif" />
+        </video>
         <figcaption class="figure-caption">Fig. 2: Visualisation of physical memory being mapped into <br/>kernel-space of a process (blue represents a chunk of memory)</figcaption>
       </figure>
+
       <p>Most importantly in the context of Spectre and Meltdown, as the kernel may need to access user memory, operating systems such as Linux and OS X map the entire physical memory into a
         predefined virtual address in kernel address space so that the kernel can access the memory it needs<sup><a href="#4">[4]</a></sup>.</p>
     </div>
