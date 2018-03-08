@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Meltdown and Spectre</title>
+
+  <link rel="stylesheet" href="css/bootstrap.css" media="screen">
+  <link rel="stylesheet" href="css/custom.min.css">
+</head>
+<body>
+<div class="navbar navbar-expand-lg fixed-top navbar-light bg-light">
+  <div class="container">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"></button>
+    <div class="collapse navbar-collapse" id="navbarResponsive">
+      <ul class="navbar-nav">
+        <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+        <li class="nav-item dropdown active">
+          <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="background-overview.html">Background<span class="caret"></span></a>
+          <div class="dropdown-menu">
+            <a class="dropdown-item" href="background-overview.html">Overview of Computer Architecture</a>
+            <a class="dropdown-item" href="background-memory-management.html">Memory Management and Attacks</a>
+            <a class="dropdown-item" href="background-cpu-speculative-execution.html">CPU Management and Attacks</a>
+            <a class="dropdown-item" href="background-flush-reload.html">Cache Side Channel Attacks (Flush + Reload)</a>
+          </div>
+        </li>
+        <li class="nav-item"><a class="nav-link" href="meltdown-attack.html">Meltdown</a></li>
+        <li class="nav-item"><a class="nav-link" href="spectre-attack.html">Spectre</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+
+<div class="container">
+
+  <div class="row">
+    <div class="col-md-12">
+      <h1>Introduction to Architecture</h1>
+
+      <p>In 1945, John von Neumann first described his eponymous computer architecture, whose usage in modern personal machines is now ubiquitous<sup><a href="#1">[1]</a></sup>. The design, illustrated in figure 1, features three
+        main components: a central processing unit (itself comprised of an arithmetic logic unit (ALU) and a control unit) moderating interactions between the other two parts: system memory (RAM), and
+        input/output devices.</p>
+      <p>In this model, communication between the different parts takes place over data buses, and it is crucially differentiated from the related Harvard architecture by the fact that CPU
+        instructions are stored alongside data, and both information types must be transferred through a single shared bus (whereas the two are separated in the latter design).</p>
+      <p>Furthermore, each thread of the CPU executes instructions strictly sequentially – in a fetch-execute-decode cycle – based on the instructions’ order in memory; the ordinal position of a
+        particular instruction is called its line address. The execution cycles are synchronised by a system clock, which regularly pulses with rising- and falling-edges (see figure 2) and
+        instructions are executed on one of the two edges, with each one requiring an integer number of cycles to complete. The frequency of pulses is the clock speed of the processor. The CPU also
+        contains registers, which are rapidly-accessible specialised memory stores that hold one specific item of information, be it a memory location, numerical value, or instruction. The control
+        unit governs the transmittance of information through the system, which the ALU manages all numerical calculations.</p>
+
+      <figure class="figure text-center d-block">
+        <img style="width: 70%;" src="images/von-neumann.png"/>
+        <figcaption class="figure-caption">Fig. 1: Design of a von Neumann machine</figcaption>
+      </figure>
+
+      <figure class="figure text-center d-block">
+        <img style="width: 100%;" src="images/clock-pulses.png"/>
+        <figcaption class="figure-caption">Fig. 2: Rising and falling edges of a system’s clock pulses</figcaption>
+      </figure>
+
+      <p>The operating system shares information stored in RAM with all running programs which require the material. Allowing sharing reduces the memory footprint of the system, and also improves
+        time efficiency as loading information-loading delays are reduced. This represents no security fault as system memory is read-only or copy-on-write, so damaging modifications cannot occur.
+        While copy-on-write permits reading freely, attempts to write to memory results in a CPU trap – an exception – which is only resolved by the creation of a copy of the aforementioned data by
+        the operating system, located elsewhere in <sup><a href="#2">[2]</a></sup>. (Yet, even though writing is forbidden, copy-on-write introduces a security vulnerability as the delay in copying is susceptible to a
+        side-channel attack, but such a possibility is out of the scope of this webpage.)</p>
+      <p>However, RAM, while orders of magnitude faster than disk storage solutions, is slow in comparison to cache memory, which is physically located within the CPU. This type of memory temporarily
+        holds frequently- or recently-used instructions, thereby increasing time-efficiency by reducing memory latency.</p>
+      <p>On modern Intel CPUs, there is a hierarchy of three levels of cache, each varying in size and proximity to the CPU<sup><a href="#3">[3]</a></sup>. L1 and L2 caches are comparatively small in size but also the most
+        responsive, and every core possesses its own unique instances of these caches. L3 cache sacrifices some speed for size, but more crucially, on all Intel chips and also many others, it is
+        inclusive3 – L3 cache is shared among all the cores of the processor. Currently, L1 cache is on the scale of<sup><a href="#2">[2]</a></sup> a few hundred kB, L2 around 1 MB, and L3 around 10 MB. Cache is not read-only or
+        copy-on-write, and this may result in unwanted write commands.</p>
+    </div>
+  </div>
+
+  <hr>
+  <row>
+    <div class="col-md-12">
+      <p>
+        <span id="1"><sup>[1]</sup></span> D. Hillis, The Connection Machine, MIT Press, 1985, cited in C.I.Krempeaux, Von Neumann Bottleneck, [website], 2011, http://changelog.ca/quote/2011/10/19/von_neumann_bottleneck,  (accessed 7 March 2018). <br />
+        <span id="2"><sup>[2]</sup></span> Y.Yarom, ‘FLUSH+RELOAD: a High Resolution, Low Noise, L3 Cache Side-Channel Attack.’, 2013, https://eprint.iacr.org/2013/448.pdf, (accessed 5 March 2018). <br />
+        <span id="3"><sup>[3]</sup></span> Intel Corporation, Intel® 64 and IA-32 Architectures Software Developer’s Manual, 2017.
+      </p>
+    </div>
+  </row>
+  <hr>
+
+  <footer id="footer">
+    <div class="row">
+      <div class="col-lg-12">
+        <p>Created by <a href="#">Dingyu Chen</a>, <a href="#">Anindita Ghosh</a>, <a href="#">Giovanni Passerello</a> and <a href="kelvin/index.html">Kelvin Zhang</a>.</p>
+      </div>
+    </div>
+  </footer>
+
+
+</div>
+
+
+<script src="js/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+</body>
+</html>
