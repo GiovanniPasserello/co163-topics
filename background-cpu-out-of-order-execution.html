@@ -50,7 +50,39 @@
 
   <div class="row">
     <div class="col-md-12">
+      <h1>Pipelining and Out of Order Execution</h1>
+      <p>
+        Say, for example, an instruction (I1) requires some input data from the main memory to run, whilst another instruction (I2) already has its input data in cache memory, it would be more
+        effective to run I2 first then I1, as fetching data from main memory takes much more time than recalling from the cache. Out of order execution is used to proficiently process instructions, by
+        depending on the availability of its operands and execution units rather than strictly running each instruction depending on when it was added to the queue<sup><a href="#1">[1]</a></sup>; as
+        such, recently added instructions to the queue may be processed earlier than older instructions.
+      </p>
+      <p>
+        Although each instruction may run in a different order to when it was called, the order of results will correspond to the timeline of when each instruction was added to the queue<sup><a
+          href="#2">[2]</a></sup>. The process goes as follows<sup><a href="#3">[3]</a></sup>:
+      </p>
+      <p>
+      <ol>
+        <li> The instruction is added to a queue made up of other instructions, following the fetch cycle</li>
+        <li>If an instruction's input data become available, it is allowed to leave the queue, regardless of when it was added to the queue, and is executed by an available and suitable functional
+          unit</li>
+        <li>The result of this process is collected in another queue</li>
+        <li> Once the result of all the older instructions before it are available, all the results from the queue are written back to the register file</li>
+      </ol>
+      </p>
 
+      <figure class="figure text-center d-block">
+        <video style="width: 75%;" autoplay loop controls>
+          <source src="images/oooe.mp4" type="video/mp4"/>
+          <img src="images/oooe.gif"/>
+        </video>
+        <figcaption class="figure-caption">Figure 1 shows how out of order execution works</figcaption>
+      </figure>
+
+      <p>
+        This system allows the CPU to reach an optimum of reading the input data, executing instructions and returning the results. Pipelining also adds to streamlining this entire process, by
+        delegating to every functional unit a part of a task as soon as it is free<sup><a href="#4">[4]</a></sup>. This allows different parts of the instruction to be processed at the same time,
+        making the entire procedure time-efficient<sup><a href="#5">[5]</a></sup>.</p>
     </div>
   </div>
 
@@ -69,7 +101,18 @@
   <row>
     <div class="col-md-12">
       <p>
+        <span id="1"><sup>[1]</sup></span>Kukunas, J. (2015). Power and Performance: Software Analysis and Optimization. Waltham, MA: Morgan Kaufmann, p.37<br/>
 
+        <span id="2"><sup>[2]</sup></span>Mutlu, O. (2015). 'Out of Order Execution' [Powerpoint presentation]. 18-447 Introduction to Computer Architecture.<a
+          href="http://www.ece.cmu.edu/~ece447/s15/doku.php?id=start"> http://www.ece.cmu.edu/~ece447/s15/doku.php?id=start. </a>[Accessed 06 Mar. 2018]<br/>
+
+        <span id="3"><sup>[3]</sup></span>Cs.uaf.edu. (2018). Out-of-order Execution. [online]<a href="http://www.ece.cmu.edu/~ece447/s15/doku.php?id=start">
+        http://www.ece.cmu.edu/~ece447/s15/doku.php?id=start </a>[Accessed 01 Mar. 2018]<br/>
+
+        <span id="4"><sup>[4]</sup></span>Pcguide.com. (2018). Out-of-Order Execution. [online]<a href="http://www.ece.cmu.edu/~ece447/s15/doku.php?id=start">
+        http://www.ece.cmu.edu/~ece447/s15/doku.php?id=start </a>[Accessed 08 Mar. 2018]<br/>
+
+        <span id="5"><sup>[5]</sup></span>Shen, J. and Lipasti, M. (2005). Modern Processor Design: Fundamentals of Superscalar Processors. New York: McGraw-Hill, pp.39-97
       </p>
     </div>
   </row>
