@@ -35,24 +35,19 @@
   </div>
 </div>
 
-
-<div class="container">
-  <div class="row">
-    <div class="col-sm-12">
-      <div class="d-flex justify-content-between">
-        <p>
-          <small><a href="background-overview.html">&laquo; Introduction to Architecture</a></small>
-        </p>
-        <p>
-          <small><a href="background-memory-attacks.html">Memory-corruption Attacks and ASLR &raquo;</a></small>
-        </p>
-      </div>
+<div class="jumbo" style="background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('images/computer-memory-chips.jpg');">
+  <div class="container">
+    <div class="offset-md-1">
+      <h1 class="jumbo-header">Memory Management and Attacks</h1>
     </div>
   </div>
+</div>
+
+
+<div class="container">
 
   <div class="row">
     <div class="offset-md-1 col-md-10">
-      <h1>Memory Management and ASLR</h1>
       <p>
         Both the Meltdown and Spectre attacks allow attackers to leak information from memory. Meltdown in particular allows an attacker to read a machine's entire kernel memory, bypassing techniques
         aimed at preventing processes from accessing memory locations which should not be able to be accessed<sup><a href="#1">[1]</a></sup>. This section explains memory management in more detail.
@@ -66,8 +61,8 @@
       </p>
       <figure class="figure text-center d-block">
         <video style="width: 45%;" autoplay loop controls>
-          <source src="images/virtualmemoryanimated.mp4" type="video/mp4" />
-          <img src="images/virtualmemoryanimated.gif" />
+          <source src="images/virtualmemoryanimated.mp4" type="video/mp4"/>
+          <img src="images/virtualmemoryanimated.gif"/>
         </video>
         <figcaption class="figure-caption">Fig. 1: Model of page-frame mapping</figcaption>
       </figure>
@@ -92,8 +87,8 @@
 
       <figure class="figure text-center d-block">
         <video style="width: 50%;" autoplay loop controls>
-          <source src="images/mappinganimated.mp4" type="video/mp4" />
-          <img src="images/mappinganimated.gif" />
+          <source src="images/mappinganimated.mp4" type="video/mp4"/>
+          <img src="images/mappinganimated.gif"/>
         </video>
         <figcaption class="figure-caption">Fig. 2: Visualisation of physical memory being mapped into <br/>kernel-space of a process (blue represents a chunk of memory)</figcaption>
       </figure>
@@ -138,6 +133,7 @@
     <div class="row">
       <div class="col-lg-12">
         <p>Created by <a href="#">Dingyu Chen</a>, <a href="#">Anindita Ghosh</a>, <a href="#">Giovanni Passerello</a> and <a href="kelvin/index.html">Kelvin Zhang</a>.</p>
+        <p>Image attributions: <em>Computer Memory Chips</em> by Petr Kratochivil under CC0.</p>
       </div>
     </div>
   </footer>
