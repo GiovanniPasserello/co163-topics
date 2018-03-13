@@ -49,7 +49,72 @@
 
   <div class="row">
     <div class="col-md-12">
-
+      <h1>Mitigations</h1>
+      <br/>
+      <p>
+        According to the original website devoted to Spectre and Meltdown, Spectre “is not easy to
+        fix, it will haunt us for quite some time”, although according to DELL computers, “No
+        ‘real-world’ exploits of these vulnerabilities have been reported to date (February 7,
+        2018), though researchers have produced proof-of-concepts”. In the long term it seems likely
+        that Meltdown will be a thing of the past, wholly mitigated, however Spectre is going to be
+        around for a much longer time till fully patched.
+      </p>
+      <p>
+        It would be possible to simply disable speculative execution however this would yield a
+        significant performance penalty, therefore affected companies have worked on patches
+        prioritising minimal performance drops. Many of these patches have reported benchmark
+        performance drops of 2-14% on average on eighth-generation Core platforms and many were
+        unsuccessful, causing frequent random reboots and crashes. There are three patch approaches:
+      </p>
+      <ul>
+        <li><b>Browser:</b><br/>
+          <p>
+            Browsers are particularly at risk to Spectre as it is rather simple to write JavaScript
+            to perform an attack and steal personal information such as passwords; this can also
+            provide data useful for breaking out of browser sandboxes.
+          <br/>
+            High-resolution timers are used by JavaScript for means of benchmarking, however Spectre
+            attackers may utilise this in a side channel timing attack. To protect against Spectre,
+            most major browsers such as Google Chrome, Mozilla Firefox, Safari and Microsoft Edge
+            have reduced the resolution of the JavaScript timers from a granularity of 5 to 20
+            microseconds in order mitigate the effects of a timing attack. Some browsers have also
+            reduce the timer accuracy by introducing up to 20 microseconds of random jitter in its
+            results; this approach is called time-fuzzing.
+          </p>
+        </li>
+        <li><b>Google:</b><br/>
+          <p>
+            Google have said that Spectre “doesn’t have any clean, simple fix… Spectre is going to
+            require careful examination of, and repair to, vulnerable applications”. On January 4,
+            2018, however, Google detailed a new technique on their security blog called “Retpoline”
+            (return trampoline) which is said to mitigate the effect of Spectre with negligible
+            processor overhead. Retpoline is a software construct for preventing
+            branch-target-injection which allows indirect branches to be isolated from speculative
+            execution so that illegal data access will not occur. This is primarily achieved by
+            using return operations which figuratively ensures that any associated speculative
+            execution will “bounce” endlessly.
+          </p>
+        </li>
+        <li><b>Intel:</b><br/>
+          <p>
+            Intel has recommended inserting a serializing instruction (Intel chose to use lfence
+            however there are others) in code between the conditional array bound check and
+            accessing the array. This would prevent speculative execution as every instruction that
+            appears before the serializing instruction must be completed until the serializing
+            instruction can be executed. This would mean that the array bound check would have been
+            definitively calculated before the array is ever accessed; this would mean that no parts
+            of the array would have illegal access. This technique obviously comes with a
+            significant performance drop, so programmers should be careful in the insertion of
+            serializing instructions inserting them only where private data may be involved.
+          </p>
+        </li>
+      </ul>
+      <p>
+        These above issues, alongside many other factors, simply underline the complexity of Spectre
+        and the fact that a definitive patch is not so trivial. The computing community and wider
+        world may have to deal with this vulnerability for a long time yet, until a concrete
+        solution is found.
+      </p>
     </div>
   </div>
 

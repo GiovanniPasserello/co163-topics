@@ -50,7 +50,60 @@
 
   <div class="row">
     <div class="col-md-12">
-
+      <h1>Performance Improvements</h1>
+      <p>
+        The fetching of data from main memory in the Fetch-Decode-Execute cycle takes a
+        comparatively large amount of time as compared to the rest of the cycle. When a program
+        depends on the fetching of an uncached value in main memory, it may take several hundred
+        clock cycles before the value is returned. Rather than wasting these cycles by idling,
+        processors implement instruction-level parallelism through pipelining. The purpose of
+        pipelining is to keep every module of the processor busy with some instruction with the
+        aim of increasing instruction throughput. Ideally the pipeline aims to execute one fetch
+        instruction per cycle; if this is achieved, the processor is said to be ‘fully pipelined’.
+        In order to maximise performance, modern high-speed processors utilise various optimisation
+        techniques to reduce the idle wait time; two of these methods are Branch Prediction and
+        Speculative Execution.
+      </p>
+      <h2>Branch Prediction</h2>
+      <p>
+        A Branch Predictor is a digital circuit whose purpose is to guess which branch of a
+        conditional statement will be taken before the true branch is known.  They play a
+        critical role in flow improvement within the instruction pipeline and in maximising
+        processor performance.
+        The first time a conditional jump instruction is encountered the branch predictor has
+        little information to use, however the branch predictor holds a record (Branch Target
+        Buffer – BTB) of which branches are taken each time. In the case that it encounters a
+        conditional jump that has been seen multiple times it can then make a prediction based
+        on past results. The prediction could either be based on patterns such as that a
+        particular branch is taken every other time or that it is simply taken more often than not.
+      </p>
+      <p>
+        For example, a two-level adaptive branch predictor will hold a 2-bit saturating
+        counter for each branch, to rate the likelihood of it being taken. These counters
+        are stored in a Pattern History Table where every entry represents a 2-bit
+        saturating counter of the type shown in figure 1. When a branch is evaluated, it’s
+        counter will be updated.
+      </p>
+      <figure class="figure text-center d-block">
+        <img src="images/branchpredictor.png"/>
+        <figcaption class="figure-caption"><i>Figure 1</i>: 2-Bit Saturating Counter for a branch</figcaption>
+      </figure>
+      <figure class="figure text-center d-block">
+        <img src="images/btb.png"/>
+        <figcaption class="figure-caption"><i>Figure 2</i>: Evaluation of a branch</figcaption>
+      </figure>
+      <h2>Speculative Execution</h2>
+      <p>
+        Speculative execution is a technique in which the processor will guess likely future execution
+        paths - typically, but not limited to, via Branch Prediction - and attempt to prematurely
+        execute them. After deciding on the execution path, the processor will save a checkpoint of
+        its register state and proceed to speculatively execute the program via the chosen path. When
+        the value eventually arrives from memory, the processor checks the correctness of its initial
+        guess. If the guess was incorrect, the processor will rollback by reverting the register state
+        back to the stored checkpoint, yielding no processing improvement as compared to idling. In
+        the case that the guess was correct, however, the speculative execution results are committed,
+        resulting in a significant performance increase.
+      </p>
     </div>
   </div>
 
