@@ -9240,3 +9240,18 @@ table-success, table-info, table-warning, table-danger,
 .list-group {
   font-size: 0.875em;
 }
+
+.jumbo {
+  margin-top: -120px;
+  padding-top: 240px;
+  padding-bottom: 50px;
+  margin-bottom: 50px;
+}
+
+.jumbo-header {
+  color: white;
+}
+
+.jumbo-solid {
+  background-color: #3C6991;
+}
