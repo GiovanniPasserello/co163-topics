@@ -24,8 +24,8 @@
           <div class="dropdown-menu">
             <a class="dropdown-item" href="background-overview.html">Overview of Computer Architecture</a>
             <a class="dropdown-item" href="background-memory-management.html">Memory Management and Attacks</a>
-            <a class="dropdown-item" href="background-cpu-speculative-execution.html">CPU Management and Attacks</a>
-            <a class="dropdown-item" href="background-flush-reload.html">Cache Side Channel Attacks (Flush + Reload)</a></div>
+            <a class="dropdown-item" href="background-cpu-speculative-execution.html">CPU Management</a>
+            <a class="dropdown-item" href="background-flush-reload.html">CPU Side Channel Attacks</a></div>
         </li>
         <li class="nav-item active"><a class="nav-link" href="meltdown-attack.html">Meltdown</a></li>
         <li class="nav-item"><a class="nav-link" href="spectre-attack.html">Spectre</a></li>
@@ -34,24 +34,19 @@
   </div>
 </div>
 
-
-<div class="container">
-  <div class="row">
-    <div class="col-sm-12">
-      <div class="d-flex justify-content-between">
-        <p>
-          <small><a href="meltdown-attack.html">&laquo; Attack</a></small>
-        </p>
-        <p>
-
-        </p>
-      </div>
+<div class="jumbo jumbo-solid">
+  <div class="container">
+    <div class="offset-md-1">
+      <h1 class="jumbo-header">Meltdown</h1>
     </div>
   </div>
+</div>
+
+<div class="container">
 
   <div class="row">
     <div class="offset-md-1 col-md-10">
-      <h2>Meltdown Mitigations/KPTI</h2>
+      <h2>Mitigations and KPTI</h2>
       <p>Meltdown's mitigations exist at the kernel level. Over January 2018, major operating systems were patched. Linux mitigated the vulnerability using KPTI (kernel page-table isolation), which
         originated from the KAISER (Kernel Address Isolation to have Side-channels Efficiently Removed) patch set developed to harden the kernel against KASLR bypasses<sup><a href="#1">[1]</a></sup>.</p>
 
