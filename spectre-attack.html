@@ -53,7 +53,7 @@
           processor rollback methods, however recent research suggests otherwise. Spectre attacks
           involve inducing a victim to speculatively execute operations that would not occur
           during correct execution of the program and which may leak the victim’s private data
-          via a microarchitectural covert side channel attack to the adversary – predominantly
+          via a micro-architectural covert side channel attack to the adversary – predominantly
           using Flush and Reload techniques. The problem with reverting back to a checkpoint
           after erroneous speculative execution is that changes to certain parts of the CPU -
           such as cache contents -  may subsist the state reversion.
@@ -62,18 +62,16 @@
         <p>
           An example of exploitable code is as follows:
         </p>
-        <pre><code>
-          <i>
-    if (x < array1_size)
-          y = array2[array1[x] * 256];
-          </i>
-        </code></pre>
+        <pre><code><i>
+          if (x < array1_size)
+              y = array2[array1[x] * 256];
+        </i></code></pre>
       <br/>
       <p>
         In the above example, the attacker-controlled variable, x, is checked to be within a legal
-        range to ensure the access to array1 is valid. If the value of x is valid then the succeeding
+        range to ensure the access to <code>array1</code> is valid. If the value of x is valid then the succeeding
         statement may run, otherwise the program shouldn’t be allowed to access that section of
-        array2.
+        <code>array2</code>.
       </p>
       <br/>
       <figure class="figure text-center d-block">
@@ -84,23 +82,23 @@
       <p>
         In order to exploit this, the attacker will first train the Branch Predictor to take the
         branch by invoking the code with valid inputs multiple times so that it will begin to
-        speculatively execute the branch; this will cause array1_size to be uncached and array1
+        speculatively execute the branch; this will cause <code>array1_size</code> to be uncached and <code>array1</code>
         to become cached. The attacker will then invoke the code with an invalid value of x and
-        reading array1_size will result in a cache miss, causing a substantial delay until the
+        reading <code>array1_size</code> will result in a cache miss, causing a substantial delay until the
         value is available from main memory. During this delay, the processor will begin to
-        speculatively execute the branch and read the value of array1[x] resulting in a cache hit,
+        speculatively execute the branch and read the value of <code>array1[x]</code> resulting in a cache hit,
         quickly returning the value of a secret byte, k. The processor will request a read from
-        array2[k * 256] which will result in another cache miss. The value of array1_size then
-        returns from memory whilst the read from array2 is pending. The processor will realise that
+        <code>array2[k * 256]</code> which will result in another cache miss. The value of <code>array1_size</code> then
+        returns from memory whilst the read from <code>array2</code> is pending. The processor will realise that
         the speculative execution was erroneous and the program is reverted back to the checkpoint,
         however the change in cache state is not reverted.
       </p>
       <p>
         In order to recover the secret byte, k, from cache, the attacker may launch a side channel
         attack to detect a change in the cache state. Alternatively the attacker may request a read
-        from array2[k’ * 256] with a range of values of k’; the value of k’ = k will result in a
+        from <code>array2[k’ * 256]</code> with a range of values of k’; the value of k’ = k will result in a
         cache hit, meaning the attacker can observe the short return time using a timer and obtain
-        k. The value of array2[k * 256] can then be read to gain access to the victim’s private
+        k. The value of <code>array2[k * 256]</code> can then be read to gain access to the victim’s private
         memory.
       </p>
       <br/>
