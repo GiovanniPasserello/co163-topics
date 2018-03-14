@@ -47,6 +47,65 @@
 
   <div class="row">
     <div class="offset-md-1 col-md-10">
+      <p>There are two parts to carrying out a Meltdown attack<sup><a href="#1">[1]</a></sup>. The first part consists of making the CPU execute one or more instructions that would otherwise never
+        occur in the executed path
+        (transient instructions), e.g. access an address the instruction should not have access to. The second part is making sure the microarchitectural state change is carried forward to create an
+        architectural state change, and thus the data be accessed from there.
+      </p>
+      <p>When an instruction is fetched, it will first be scheduled to be read<sup><a href="#2">[2]</a></sup> then pipelined<sup><a href="#3">[3]</a></sup> by the CPU, with the privilege check
+        occurring later, which may not in parallel. The effect of not
+        having the privilege check occur in parallel means that the attacking application can be forked before accessing the memory location that causes the privilege check to fail, and as such ensure
+        that the prohibited memory address the transient instruction is trying to read, is going to be read regardless of the privilege check passing or failing<sup><a href="#4">[4]</a></sup>.
+      </p>
+
+      <figure class="figure text-center d-block">
+        <video style="width: 50%;" autoplay loop controls>
+          <source src="images/meltdownpart1.mp4" type="video/mp4">
+          <img src="images/meltdownpart1.gif"/>
+        </video>
+        <figcaption class="figure-caption"> Figure 1</figcaption>
+      </figure>
+
+      <p>By doing this process out of order, the results aren’t retired as it will eventually fail the privilege check, thus allowing the architectural state to roll-back to a previous state<sup><a
+          href="#1">[1]</a></sup>.
+        However there are severe microarchitectural side effects. This is where we delve into the second part of this attack.
+      </p>
+
+      <p>If a part of the instruction depends on reading an unauthorized address, that piece of information will still be read (as that is what the functional unit was told to do for that part of the
+        overall instruction.) Although, if this piece of information is read, the sensitive data is never seen by the register unit, due to the failure of the privilege check. However, as the
+        instruction has already read the key data it should not have access to, by reading the memory, the information is also updated to the CPU cache as part of a normal memory recall<sup><a
+            href="#5">[5]</a></sup>.
+      </p>
+
+      <p>This means that whilst the instruction execution is abandoned and thus its results discarded, the sensitive data it managed to call during the execution process is now available in the cache.
+        Although all the information at that address isn’t put onto the CPU cache, the part that was called for the instruction to progress is still there, as preparation for future recall of this
+        data; this can then be exfiltrated by attackers via a side channel attack to read the part of the contents of the prohibited address (usually via flush + reload)<sup><a href="#6">[6]</a></sup>.
+      </p>
+
+      <figure class="figure text-center d-block">
+        <video style="width: 50%;" autoplay loop controls>
+          <source src="images/meltdownpart2.mp4" type="video/mp4">
+          <img src="images/meltdownpart2.gif"/>
+        </video>
+        <figcaption class="figure-caption"> Figure 2</figcaption>
+      </figure>
+
+      <p>The implications of this method means that any part of the physical memory can be effectively retrieved within a short period of time, i.e. attackers can read every address of interest with
+        great efficiency<sup><a href="#1">[1]</a></sup>.
+      </p>
+
+
+      <div id="wrapper">
+        <sup><a href="#7">[7]</a></sup>
+        <div class="embed-responsive embed-responsive-21by9">
+          <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/bReA1dvGJ6Y"></iframe>
+        </div>
+        <sup><a href="#8">[8]</a></sup>
+        <div class="embed-responsive embed-responsive-21by9">
+          <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/6ViS_YOvmpg" allowfullscreen></iframe>
+        </div>
+      </div>
+
 
     </div>
   </div>
@@ -57,7 +116,7 @@
         <p>
 
         </p>
-        <p><b><a href="meltdown-mitigations.html">Mitigations  &raquo;</a></b></p>
+        <p><b><a href="meltdown-mitigations.html">Mitigations &raquo;</a></b></p>
       </div>
     </div>
   </div>
@@ -66,6 +125,27 @@
   <row>
     <div class="col-md-12 references">
       <p>
+        <span id="1"><sup>[1]</sup></span>M. Lipp et al., <i>Meltdown</i>, arXiv preprint arXiv:1801.01207, (2018) <br/>
+        <span id="2"><sup>[2]</sup></span>Homepage.cs.uri.edu. (n.d.). <i>How The Computer Works: The CPU and Memory</i>, [online] <a
+          href="http://homepage.cs.uri.edu/faculty/wolfe/book/Readings/Reading04.htm"> http://homepage.cs.uri.edu/faculty/wolfe/book/Readings/Reading04.html </a> (Accessed 6 Mar. 2018)
+        <br/>
+        <span id="3"><sup>[3]</sup></span>Cs.stanford.edu., <i>Pipelining</i>, [online] <a href="https://cs.stanford.edu/people/eroberts/courses/soco/projects/risc/pipelining/index.html">
+        https://cs.stanford.edu/people/eroberts/courses/soco/projects/risc/pipelining/index.html </a> (Accessed
+        6 Mar. 2018)<br/>
+        <span id="4"><sup>[4]</sup></span>Trail of Bits Blog, <i>An accessible overview of Meltdown and Spectre</i>, [Web blog] <a
+          href="https://blog.trailofbits.com/2018/01/30/an-accessible-overview-of-meltdown-and-spectre-part-1/">
+        https://blog.trailofbits.com/2018/01/30/an-accessible-overview-of-meltdown-and-spectre-part-1/ </a>
+        (Accessed 1 Mar. 2018)<br/>
+        <span id="5"><sup>[5]</sup></span>The ryg blog, <i>Why do CPUs have multiple cache levels?</i>, [Web blog] <a
+          href="https://fgiesen.wordpress.com/2016/08/07/why-do-cpus-have-multiple-cache-levels/"> https://fgiesen.wordpress.com/2016/08/07/why-do-cpus-have-multiple-cache-levels/ </a>
+        (Accessed 8 Mar. 2018)<br/>
+        <span id="6"><sup>[6]</sup></span>Capsule8. <i>Detecting Meltdown and Spectre by Detecting Cache Side Channels</i>, [online] <a
+          href="https://capsule8.com/blog/detecting-meltdown-spectre-detecting-cache-side-channels/"> https://capsule8.com/blog/detecting-meltdown-spectre-detecting-cache-side-channels/ </a>
+        (Accessed 8 Mar. 2018)<br/>
+        <span id="7"><sup>[7]</sup></span><i>Meltdown in Action: Dumping memory</i>, [online video], 2018, <a href="https://www.youtube.com/watch?v=bReA1dvGJ6Y">
+        https://www.youtube.com/watch?v=bReA1dvGJ6Y </a> (Accessed 13 Mar. 2018)
+        <span id="8"><sup>[8]</sup></span><i>Meltdown Demo - Reading uncached memory</i>, [online video], 2018, <a href="https://www.youtube.com/watch?v=6ViS_YOvmpg">
+        https://www.youtube.com/watch?v=6ViS_YOvmpg </a> {Accessed 13 Mar. 2018)
 
       </p>
     </div>
