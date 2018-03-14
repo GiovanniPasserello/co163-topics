@@ -46,6 +46,14 @@
 
   <div class="row">
     <div class="offset-md-1 col-md-10">
+        <figure class="figure text-center d-block">
+            <video style="width: 100%;" autoplay loop controls>
+                <source src="images/spectre-poc05.mp4" type="video/mp4"/>
+                <img src="images/spectre-poc05.gif"/>
+            </video>
+            <figcaption class="figure-caption">Spectre Proof of Concept</figcaption>
+        </figure>
+
         <p>
           The Spectre Attacks are a class of computer attacks which leverage speculative
           execution to execute programs in incorrect ways, rendering measurable side effects.
@@ -81,20 +89,35 @@
         <figcaption class="figure-caption"><i>Figure 1</i>: Shows private and accessible sections of memory</figcaption>
       </figure>
       <br/>
-      <p>
-        In order to exploit this, the attacker will first train the Branch Predictor to take the
-        branch by invoking the code with valid inputs multiple times so that it will begin to
-        speculatively execute the branch; this will cause array1_size to be uncached and array1
-        to become cached. The attacker will then invoke the code with an invalid value of x and
-        reading array1_size will result in a cache miss, causing a substantial delay until the
-        value is available from main memory. During this delay, the processor will begin to
-        speculatively execute the branch and read the value of array1[x] resulting in a cache hit,
-        quickly returning the value of a secret byte, k. The processor will request a read from
-        array2[k * 256] which will result in another cache miss. The value of array1_size then
-        returns from memory whilst the read from array2 is pending. The processor will realise that
-        the speculative execution was erroneous and the program is reverted back to the checkpoint,
-        however the change in cache state is not reverted.
-      </p>
+      <p>In order to exploit this, the following steps need to be taken:</p>
+      <ul>
+        <li>
+          The attacker will first train the Branch Predictor to take the branch by
+          invoking the code with valid inputs multiple times so that it will begin to
+          speculatively execute the branch in the future; this will cause array1_size to
+          be uncached and array1 to become cached.
+        </li>
+        <li>
+          The attacker will then invoke the code with an invalid value of x and reading
+          array1_size will result in a cache miss, causing a substantial delay until the
+          value is available from main memory.
+        </li>
+        <li>
+          During this delay, the processor will begin to speculatively execute the branch
+          and read the value of array1[x] resulting in a cache hit, quickly returning the
+          value of a secret byte, k.
+        </li>
+        <li>
+          The processor will request a read from array2[k * 256] which will result in
+          another cache miss.
+        </li>
+        <li>
+          The value of array1_size then returns from memory whilst the read from array2 is
+          pending. The processor will realise that the speculative execution was erroneous
+          and the program is reverted back to the checkpoint, however the change in cache
+          state is not reverted.
+        </li>
+      </ul>
       <p>
         In order to recover the secret byte, k, from cache, the attacker may launch a side channel
         attack to detect a change in the cache state. Alternatively the attacker may request a read
