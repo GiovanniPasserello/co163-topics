@@ -9246,6 +9246,10 @@ table-success, table-info, table-warning, table-danger,
   padding-top: 240px;
   padding-bottom: 50px;
   margin-bottom: 50px;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+
 }
 
 .jumbo-header {
