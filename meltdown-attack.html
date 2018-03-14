@@ -34,7 +34,7 @@
   </div>
 </div>
 
-<div class="jumbo jumbo-solid">
+<div class="jumbo" style="background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('images/processor.jpg');">
   <div class="container">
     <div class="offset-md-1">
       <h1 class="jumbo-header">Meltdown</h1>
@@ -44,6 +44,23 @@
 
 
 <div class="container">
+
+  <div class="row">
+    <div class="offset-md-1 col-md-5">
+      <figure class="figure text-center d-block img-thumbnail">
+        <div class="embed-responsive embed-responsive-16by9">
+          <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/bReA1dvGJ6Y"></iframe>
+        </div>
+      </figure>
+    </div>
+    <div class="col-md-5">
+      <figure class="figure text-center d-block img-thumbnail">
+        <div class="embed-responsive embed-responsive-16by9">
+          <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/6ViS_YOvmpg" allowfullscreen></iframe>
+        </div>
+      </figure>
+    </div>
+  </div>
 
   <div class="row">
     <div class="offset-md-1 col-md-10">
@@ -71,7 +88,7 @@
         However there are severe microarchitectural side effects. This is where we delve into the second part of this attack.
       </p>
 
-      <p>If a part of the instruction depends on reading an unauthorized address, that piece of information will still be read (as that is what the functional unit was told to do for that part of the
+      <p>If a part of the instruction depends on reading an unauthorised address, that piece of information will still be read (as that is what the functional unit was told to do for that part of the
         overall instruction.) Although, if this piece of information is read, the sensitive data is never seen by the register unit, due to the failure of the privilege check. However, as the
         instruction has already read the key data it should not have access to, by reading the memory, the information is also updated to the CPU cache as part of a normal memory recall<sup><a
             href="#5">[5]</a></sup>.
@@ -82,30 +99,9 @@
         data; this can then be exfiltrated by attackers via a side channel attack to read the part of the contents of the prohibited address (usually via flush + reload)<sup><a href="#6">[6]</a></sup>.
       </p>
 
-      <figure class="figure text-center d-block">
-        <video style="width: 50%;" autoplay loop controls>
-          <source src="images/meltdownpart2.mp4" type="video/mp4">
-          <img src="images/meltdownpart2.gif"/>
-        </video>
-        <figcaption class="figure-caption"> Figure 2</figcaption>
-      </figure>
-
       <p>The implications of this method means that any part of the physical memory can be effectively retrieved within a short period of time, i.e. attackers can read every address of interest with
         great efficiency<sup><a href="#1">[1]</a></sup>.
       </p>
-
-
-      <div id="wrapper">
-        <sup><a href="#7">[7]</a></sup>
-        <div class="embed-responsive embed-responsive-21by9">
-          <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/bReA1dvGJ6Y"></iframe>
-        </div>
-        <sup><a href="#8">[8]</a></sup>
-        <div class="embed-responsive embed-responsive-21by9">
-          <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/6ViS_YOvmpg" allowfullscreen></iframe>
-        </div>
-      </div>
-
 
     </div>
   </div>
@@ -141,12 +137,7 @@
         (Accessed 8 Mar. 2018)<br/>
         <span id="6"><sup>[6]</sup></span>Capsule8. <i>Detecting Meltdown and Spectre by Detecting Cache Side Channels</i>, [online] <a
           href="https://capsule8.com/blog/detecting-meltdown-spectre-detecting-cache-side-channels/"> https://capsule8.com/blog/detecting-meltdown-spectre-detecting-cache-side-channels/ </a>
-        (Accessed 8 Mar. 2018)<br/>
-        <span id="7"><sup>[7]</sup></span><i>Meltdown in Action: Dumping memory</i>, [online video], 2018, <a href="https://www.youtube.com/watch?v=bReA1dvGJ6Y">
-        https://www.youtube.com/watch?v=bReA1dvGJ6Y </a> (Accessed 13 Mar. 2018)
-        <span id="8"><sup>[8]</sup></span><i>Meltdown Demo - Reading uncached memory</i>, [online video], 2018, <a href="https://www.youtube.com/watch?v=6ViS_YOvmpg">
-        https://www.youtube.com/watch?v=6ViS_YOvmpg </a> {Accessed 13 Mar. 2018)
-
+        (Accessed 8 Mar. 2018)
       </p>
     </div>
   </row>
